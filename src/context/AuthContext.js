@@ -16,6 +16,8 @@ export const AuthProvider = ({ children }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [granted, setGranted] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [isLogged, setIsLogged] = useState('');
+  const [userDetails, setUserDetails] = useState([]);
   
 
   useEffect(() => {
@@ -33,9 +35,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       const getLogin = await AsyncStorage.getItem("login");
-      if (getLogin) {
+      if (getLogin=="true") {
+        setIsLogged('true');
         const data = await AsyncStorage.getItem("user");
-        setUser(JSON.parse(data));
+        setUserDetails(JSON.parse(data));
       }
       
     })();
@@ -113,6 +116,8 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         authLoading,
+        isLogged,
+        userDetails,
         error,
         location,
         categories,

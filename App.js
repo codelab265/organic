@@ -89,11 +89,11 @@ export default function App() {
               component={BuyerTab}
               options={{ headerShown: false }}
             /> */}
-            {/* <Stack.Screen
+            <Stack.Screen
               name="SellerTabs"
               component={SellerTab}
               options={{ headerShown: false }}
-            /> */}
+            />
             <Stack.Screen
               name="SellerLogin"
               component={SellerLogin}

@@ -24,6 +24,7 @@ import axios from "axios";
 import { Alert } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SellerRegister = ({ navigation }) => {
   const [location, setLocation] = useState(null);
@@ -35,10 +36,10 @@ const SellerRegister = ({ navigation }) => {
     })();
   }, []);
 
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
   const { categories } = useAuthContext();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const validation = Yup.object({
     fullName: Yup.string().required("Full name is required"),
@@ -47,7 +48,7 @@ const SellerRegister = ({ navigation }) => {
     phoneNumber: Yup.string().required("Phone number is required"),
     storeName: Yup.string().required("Store name is required"),
     categoryId: Yup.string().required("Select a category"),
-    imageUrl: Yup.required("Image is required")
+    imageUrl: Yup.object().required("Image is required"),
   });
 
   const handleRegister = async (values) => {
@@ -61,12 +62,12 @@ const SellerRegister = ({ navigation }) => {
       formData.append("longitude", location?.coords.longitude);
       formData.append("storeName", values.storeName);
       formData.append("phoneNumber", values.phoneNumber);
-      formData.append("category_id", category);
+      formData.append("category_id", values.categoryId);
       const uri =
         Platform.OS === "android"
-          ? image.uri
-          : image.uri.replace("file://", "");
-      const filename = image.uri.split("/").pop();
+          ? values.imageUrl.uri
+          : values.imageUrl.uri.replace("file://", "");
+      const filename = values.imageUrl.uri.split("/").pop();
       const match = /\.(\w+)$/.exec(filename);
       const ext = match?.[1];
       const type = match ? `image/${match[1]}` : `image`;
@@ -96,11 +97,14 @@ const SellerRegister = ({ navigation }) => {
 
       console.log(response.data.data);
       Alert.alert("Message", "Registers successfully");
-      setImage('');
-      setLoading(false)
-      
+      setImage("");
+      setLoading(false);
+      const data = JSON.stringify(response.data.data);
+      await AsyncStorage.setItem("user", data);
+      await AsyncStorage.setItem("login", "true");
+      navigation.reset({ index: 0, routes: [{ name: "SellerTabs" }] });
     } catch (error) {
-        setLoading(false)
+      setLoading(false);
       console.error("Registration failed:", error.message);
       throw error;
       // Handle error, e.g. display error message
@@ -116,7 +120,7 @@ const SellerRegister = ({ navigation }) => {
       });
 
       if (!result.canceled) {
-        setFieldValue('imageUrl',result.assets[0]);
+        setFieldValue("imageUrl", result.assets[0]);
       }
     } catch (error) {
       console.error("Failed to pick an image:", error);
@@ -171,7 +175,7 @@ const SellerRegister = ({ navigation }) => {
                 imageUrl: "",
               }}
               validationSchema={validation}
-              onSubmit={(values, {resetForm})=>{
+              onSubmit={(values, { resetForm }) => {
                 handleRegister(values);
                 resetForm();
               }}
@@ -341,7 +345,9 @@ const SellerRegister = ({ navigation }) => {
                     </Text>
                   )}
                   <Button
-                    onPress={()=>{pickImage(setFieldValue)}}
+                    onPress={() => {
+                      pickImage(setFieldValue);
+                    }}
                     width={"full"}
                     bg={"gray.200"}
                     mb={2}
@@ -387,7 +393,9 @@ const SellerRegister = ({ navigation }) => {
             <Text fontSize={"md"} fontFamily={"Poppins_400Regular"}>
               ALREADY HAVE AN ACCOUNT?
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("SellerLogin")}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("SellerLogin")}
+            >
               <Text
                 color={"#86B084"}
                 fontSize={"md"}
