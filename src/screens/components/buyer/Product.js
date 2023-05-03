@@ -16,6 +16,7 @@ const Product = ({ item, press }) => {
         rounded={"md"}
         borderWidth={1}
         borderColor={"gray.200"}
+        m={1}
       >
         <Box
           w={"full"}
@@ -27,8 +28,8 @@ const Product = ({ item, press }) => {
           position={"relative"}
         >
           <Image
-            // source={{ uri: `${BASE_URL2}/${item.img_url}` }}
-            // alt={item.name}
+            source={{ uri: `${BASE_URL2}/${item.product_image}` }}
+            alt={item.product_name}
             w={"full"}
             h={"full"}
             resizeMode={"cover"}
@@ -37,19 +38,27 @@ const Product = ({ item, press }) => {
           <Box
             bg={"white"}
             position="absolute"
-            right={1}
-            top={1}
-            py={1}
-            px={2}
+            right={2}
+            top={2}
+            p={1}
+            w={8}
+            h={8}
+            justifyContent={'center'}
+            alignItems={'center'}
             rounded={"full"}
           >
-            <Text fontFamily={"Poppins_400Regular"} fontSize={"xs"}>
-              ₱ 1520
+            <Text fontFamily={"Poppins_400Regular"} fontSize={"xs"} color={Colors.blue}>
+              {item.quantity}
             </Text>
           </Box>
         </Box>
         <Box py={1} alignItems={"center"}>
-          <Text fontFamily={"Poppins_600SemiBold"}>Maize</Text>
+          <Text fontFamily={"Poppins_400Regular"}>
+            {item.product_name}
+          </Text>
+          <Text fontFamily={"Poppins_600SemiBold"} fontSize={"md"}>
+            {`₱ ${item.price}`}
+          </Text>
         </Box>
       </Box>
 

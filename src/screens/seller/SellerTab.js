@@ -4,9 +4,32 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome } from "@expo/vector-icons";
 import Home from "./home/Home";
 import Colors from "../../shared/theme/Colors";
+import AddProduct from "./home/AddProduct";
+import { Box } from "native-base";
+import { TouchableOpacity } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const BuyerTab = () => {
+  const CustomButton = ({ children, onPress }) => (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        w={60}
+        h={60}
+        rounded="full"
+        bg={Colors.primary}
+        borderWidth={4}
+        borderColor={"white"}
+      >
+        {children}
+      </Box>
+    </TouchableOpacity>
+  );
   return (
     <Tab.Navigator
       screenOptions={{
@@ -34,20 +57,26 @@ const BuyerTab = () => {
                 size={18}
                 color={focused ? Colors.primary : Colors.secondaryBlue}
               />
-              <Text style={{ color: focused ? Colors.primary : Colors.secondaryBlue, fontFamily:'Poppins_400Regular' }}>
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
                 Home
               </Text>
             </View>
           ),
-          headerShown:false
+          headerShown: false,
         }}
       />
+
       <Tab.Screen
         name="chat"
         component={Home}
         options={{
-            tabBarLabel:'Chat',
-            headerShown:false,
+          tabBarLabel: "Chat",
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center" }}>
               <FontAwesome
@@ -55,11 +84,32 @@ const BuyerTab = () => {
                 size={18}
                 color={focused ? Colors.primary : Colors.secondaryBlue}
               />
-              <Text style={{ color: focused ? Colors.primary : Colors.secondaryBlue, fontFamily:'Poppins_400Regular' }}>
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
                 Messages
               </Text>
             </View>
           ),
+        }}
+      />
+      <Tab.Screen
+        name="addProduct"
+        component={AddProduct}
+        options={{
+          headerTitle: "Add product",
+          headerStyle: { backgroundColor: Colors.primary },
+          headerTitleAlign: "center",
+          headerTitleStyle: { color: "white" },
+          tabBarIcon: ({ focused }) => (
+            <Box>
+              <FontAwesome name="plus-circle" size={20} color={"white"} />
+            </Box>
+          ),
+          tabBarButton: (props) => <CustomButton {...props} />,
         }}
       />
       <Tab.Screen
@@ -73,12 +123,17 @@ const BuyerTab = () => {
                 size={18}
                 color={focused ? Colors.primary : Colors.secondaryBlue}
               />
-              <Text style={{ color: focused ? Colors.primary : Colors.secondaryBlue, fontFamily:'Poppins_400Regular', }}>
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
                 Profile
               </Text>
             </View>
           ),
-          headerShown:false
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -92,7 +147,12 @@ const BuyerTab = () => {
                 size={18}
                 color={focused ? Colors.primary : Colors.secondaryBlue}
               />
-              <Text style={{ color: focused ? Colors.primary : Colors.secondaryBlue, fontFamily:'Poppins_400Regular' }}>
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
                 Cart
               </Text>
             </View>
