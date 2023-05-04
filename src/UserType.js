@@ -8,7 +8,7 @@ import { useState } from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const UserType = () => {
+const UserType = ({ navigation }) => {
   const [item, setItem] = useState("");
   const [disable, setDisable] = useState(true);
   const [type, setType] = useState("");

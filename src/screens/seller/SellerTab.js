@@ -7,6 +7,7 @@ import Colors from "../../shared/theme/Colors";
 import AddProduct from "./home/AddProduct";
 import { Box } from "native-base";
 import { TouchableOpacity } from "react-native";
+import Profile from "./profile/Profile";
 
 const Tab = createBottomTabNavigator();
 const BuyerTab = () => {
@@ -114,7 +115,7 @@ const BuyerTab = () => {
       />
       <Tab.Screen
         name="profile"
-        component={Home}
+        component={Profile}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center" }}>

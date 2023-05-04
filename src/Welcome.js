@@ -1,29 +1,30 @@
-
 import { useAuthContext } from "./context/AuthContext";
 import Loading from "./screens/Loading";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
-import SellerTab from "./screens/seller/SellerTab";
-import UserType from "./UserType";
-
-const getScreen = (isLogged)=>{
-  if (isLogged=="true") {
-    return <SellerTab/>
-  } else {
-    return <UserType/>
-  }
-}
 
 const Welcome = ({ navigation }) => {
-  
-  const { authLoading,isLogged } = useAuthContext();
+  const { authLoading, isLogged, userDetails } = useAuthContext();
+
+  useEffect(() => {
+    if (!authLoading) {
+      if (isLogged == "true") {
+        if (userDetails.role == 2) {
+          navigation.navigate("SellerTabs");
+        } else {
+          navigation.navigate("BuyerTabs");
+        }
+      } else {
+        navigation.navigate("UserTypeScreen");
+      }
+    }
+  }, [authLoading, isLogged, userDetails, navigation]);
 
   if (authLoading) {
     return <Loading />;
   }
 
-  return getScreen(isLogged);
-
+  return null;
 };
 
 export default Welcome;
+

@@ -33,6 +33,7 @@ import {
 import BuyerShopDetails from "./src/screens/buyer/BuyerShopDetails";
 import Colors from "./src/shared/theme/Colors";
 import { Client } from 'rollbar-react-native'
+import UserType from "./src/UserType";
 const rollbar = new Client('5b429c1de9a441c3b50ecda15998fe26')
 
 const Stack = createStackNavigator();
@@ -75,22 +76,24 @@ export default function App() {
               component={Welcome}
               options={{ headerShown: false }}
             />
-            {/**
+            <Stack.Screen name="UserTypeScreen" component={UserType} options={{ headerShown:false }}/>
+            
             <Stack.Screen
-              name="buyerLogin"
+              name="BuyerLogin"
               component={BuyerLogin}
               options={{ headerShown: false }}
             />
+            
             <Stack.Screen
-              name="buyerRegister"
+              name="BuyerRegister"
               component={BuyerRegister}
               options={{ headerShown: false }}
-            /> */}
-            {/* <Stack.Screen
-              name="buyerTabs"
+            />
+            <Stack.Screen
+              name="BuyerTabs"
               component={BuyerTab}
               options={{ headerShown: false }}
-            /> */}
+            />
             <Stack.Screen
               name="SellerTabs"
               component={SellerTab}

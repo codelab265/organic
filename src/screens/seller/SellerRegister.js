@@ -97,7 +97,6 @@ const SellerRegister = ({ navigation }) => {
 
       console.log(response.data.data);
       Alert.alert("Message", "Registers successfully");
-      setImage("");
       setLoading(false);
       const data = JSON.stringify(response.data.data);
       await AsyncStorage.setItem("user", data);

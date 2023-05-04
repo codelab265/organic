@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { KeyboardAvoidingView, TouchableOpacity,Alert } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, Alert } from "react-native";
 import LoginImage from "../../assets/img/login.png";
 import { ScrollView } from "react-native";
 import { Formik } from "formik";
@@ -33,17 +33,20 @@ const SellerLogin = ({ navigation }) => {
         email: values.email,
         password: values.password,
       })
-      .then((response) => {
+      .then(async (response) => {
         setLoading(false);
-        if(response.data.status=="error"){
-            Alert.alert('error', response.data.data);
-        }else{
-            
+        if (response.data.status == "error") {
+          Alert.alert("error", response.data.data);
+        } else {
+          const data = JSON.stringify(response.data.data);
+          await AsyncStorage.setItem("user", data);
+          await AsyncStorage.setItem("login", "true");
+          navigation.reset({ index: 0, routes: [{ name: "SellerTabs" }] });
         }
       })
       .catch((error) => {
         setLoading(false);
-        Alert.alert("error","Something went wrong");
+        Alert.alert("error", "Something went wrong");
         console.log(error);
       });
   };

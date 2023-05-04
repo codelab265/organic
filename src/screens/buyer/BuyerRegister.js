@@ -23,7 +23,7 @@ import Colors from "../../shared/theme/Colors";
         contentContainerStyle={{ flex: 1 }}
       >
         <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
-          <Box padding={4} mt={10} flex={1} bg={"white"}>
+          <Box padding={4} flex={1} bg={"white"}>
             <HStack alignItems={"center"} justifyContent={"space-between"}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Center rounded={"full"} w={45} h={45} bg={"#86B084"}>
@@ -34,7 +34,7 @@ import Colors from "../../shared/theme/Colors";
                   ></FontAwesome5>
                 </Center>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('welcome')}>
+              <TouchableOpacity onPress={() => navigation.navigate('UserTypeScreen')}>
                 <Center rounded={"full"} w={45} h={45} bg={Colors.yellow}>
                   <FontAwesome5
                     name="home"
