@@ -8,7 +8,7 @@ import Colors from "../../../shared/theme/Colors";
 const ShopItem = ({ item, link }) => {
   const Width = Dimensions.get("screen").width;
   return (
-    <TouchableOpacity  onPress={()=>link.navigate('BuyerShopDetailsScreen', {item:item})}>
+    <TouchableOpacity  onPress={()=>link.navigate('BuyerShopDetailsScreen', {shop:item})}>
       <Box w={Width / 2 - 22} m={1} bg={"white"} p={2} rounded={"md"}>
         <Box
           w={"full"}
@@ -28,16 +28,7 @@ const ShopItem = ({ item, link }) => {
             resizeMode={"cover"}
             rounded={"lg"}
           />
-          <Box bg={'gray.100'} position="absolute" left={0} bottom={0} p={1} >
-          <Text>
-            <FontAwesome5 name={"star"} size={10} color={Colors.yellow} />
-            <FontAwesome5 name={"star"} size={10} />
-            <FontAwesome5 name={"star"} size={10} />
-            <FontAwesome5 name={"star"} size={10} />
-            <FontAwesome5 name={"star"} size={10} />
-          </Text>
-          </Box>
-          
+
         </Box>
         <Box my={3} alignItems={'center'}>
         <Text fontFamily={'Poppins_600SemiBold'}>

@@ -43,7 +43,7 @@ const BuyerLogin = ({ navigation }) => {
           const data = JSON.stringify(response.data.data);
           await AsyncStorage.setItem("user", data);
           await AsyncStorage.setItem("login", "true");
-            navigation.reset({index:0, route:[{name: "BuyerTabs"}]})
+            navigation.reset({index:0, routes:[{name: "BuyerTabs"}]})
         }
       })
       .catch((error) => {

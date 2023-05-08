@@ -15,15 +15,16 @@ import {
 import { TouchableOpacity } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
-import { useAuthContext } from "../../../../context/AuthContext";
+import { useAuthContext } from "../../../context/AuthContext";
 import { ScrollView } from "react-native";
-import Colors from "../../../../shared/theme/Colors";
+import Colors from "../../../shared/theme/Colors";
 import { StatusBar } from "react-native";
 import axios from "axios";
-import EmptyImage from "../../../../assets/img/empty.png";
-import ShopItem from "../../../components/buyer/ShopItem";
+import EmptyImage from "../../../assets/img/empty.png";
+import ShopItem from "../../components/buyer/ShopItem";
+import { useIsFocused } from "@react-navigation/native";
 
-const Shops = ({ navigation }) => {
+const BuyerHome = ({ navigation }) => {
   const [search, setSearch] = useState("");
   const Width = Dimensions.get("screen").width;
   const width = Width / 3 - 20;
@@ -31,14 +32,13 @@ const Shops = ({ navigation }) => {
   const [active, setActive] = useState(0);
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isFocused = useIsFocused();
+  const { categories, userDetails } = useAuthContext();
 
   useEffect(() => {
     getShops();
-  }, [item]);
-
-
-  const { categories, userDetails } = useAuthContext();
-
+  }, [item, isFocused]);
+  
   const getShops = () => {
     setLoading(true);
     axios
@@ -59,7 +59,6 @@ const Shops = ({ navigation }) => {
 
   return (
     <Box flex={1} safeAreaTop>
-
       {/* search section */}
       <Box>
         <Box px={4} pt={2} bg={Colors.primary} roundedBottom={20}>
@@ -73,7 +72,8 @@ const Shops = ({ navigation }) => {
                   fontFamily={"Poppins_400Regular"}
                   color={"white"}
                 >
-                  Hello {userDetails.name}                </Text>
+                  Hello {userDetails.name}{" "}
+                </Text>
               </Box>
               <Text
                 fontSize={20}
@@ -223,12 +223,12 @@ const Shops = ({ navigation }) => {
           <Flex>
             <FlatList
               numColumns={2}
-              renderItem={({item}) => <ShopItem item={item}  link={navigation} />}
+              renderItem={({ item }) => (
+                <ShopItem item={item} link={navigation} />
+              )}
               data={shops}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
-            
-              
             />
           </Flex>
         )}
@@ -237,4 +237,4 @@ const Shops = ({ navigation }) => {
   );
 };
 
-export default Shops;
+export default BuyerHome;

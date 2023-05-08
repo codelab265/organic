@@ -39,11 +39,12 @@ export const AuthProvider = ({ children }) => {
         setIsLogged('true');
         const data = await AsyncStorage.getItem("user");
         setUserDetails(JSON.parse(data));
+        console.log('done');
       }
       
     })();
     getCategories();
-  }, []);
+  }, [isLogged]);
 
   useEffect(() => {
     (async () => {
@@ -123,6 +124,7 @@ export const AuthProvider = ({ children }) => {
         categories,
         login,
         logout,
+        setIsLogged
       }}
     >
       {children}

@@ -9,12 +9,15 @@ const Welcome = ({ navigation }) => {
     if (!authLoading) {
       if (isLogged == "true") {
         if (userDetails.role == 2) {
-          navigation.navigate("SellerTabs");
+          navigation.reset({index:0, routes: [{name:"SellerTabs"}]});
+          // navigation.replace("SellerTabs");
         } else {
-          navigation.navigate("BuyerTabs");
+          navigation.reset({index:0, routes: [{name:"BuyerTabs"}]});
+          // navigation.replace("BuyerTabs");
         }
       } else {
-        navigation.navigate("UserTypeScreen");
+        navigation.reset({index:0, routes: [{name:"UserTypeScreen"}]});
+        // navigation.navigate("UserTypeScreen");
       }
     }
   }, [authLoading, isLogged, userDetails, navigation]);

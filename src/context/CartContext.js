@@ -3,16 +3,18 @@ import React, { createContext, useContext, useState, useMemo } from "react";
 const CartContext = createContext();
 
 export const CartContextProvider = ({ children }) => {
+
   const [cart, setCart] = useState([]);
 
   const addToCart = (order) => {
     const { timestamp, ...others } = order;
     const newCart = [...cart, others];
     setCart(newCart);
+    console.log(newCart);
   };
 
   const removeFromCart = (order) => {
-    const newCart = cart.filter((item) => item.id !== order.id);
+    const newCart = cart.filter((item) => item.product.id !== order.id);
     setCart(newCart);
   };
 
@@ -21,8 +23,9 @@ export const CartContextProvider = ({ children }) => {
   };
 
   const editProductQuantity = ({ id, quantity }) => {
+    
     const newCart = cart.map((item) => {
-      if (item.id == id) {
+      if (item.product.id == id) {
         return { ...item, quantity, totalPrice: quantity * item.price };
       } else {
         return item;
@@ -30,10 +33,11 @@ export const CartContextProvider = ({ children }) => {
     });
   };
   const addProductQuantity = (id) => {
+    
     const newCart = cart.map((item) => {
-      if (item.id == id) {
+      if (item.product.id == id) {
         const newQty = parseInt(item.quantity) + 1;
-        return { ...item, quantity: newQty, totalPrice: newQty * item.price };
+        return { ...item, quantity: newQty, totalPrice: newQty * item.product.price };
       } else {
         return item;
       }
@@ -42,9 +46,9 @@ export const CartContextProvider = ({ children }) => {
   };
   const subtractProductQuantity = (id) => {
     const newCart = cart.map((item) => {
-      if (item.id == id) {
+      if (item.product.id == id) {
         const newQty = parseInt(item.quantity) - 1;
-        return { ...item, quantity: newQty, totalPrice: newQty * item.price };
+        return { ...item, quantity: newQty, totalPrice: newQty * item.product.price };
       } else {
         return item;
       }

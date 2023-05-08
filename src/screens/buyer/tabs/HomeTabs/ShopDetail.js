@@ -1,5 +1,15 @@
 import React from "react";
-import { Box, HStack, VStack, Text, Divider, Button, Image } from "native-base";
+import {
+  Box,
+  HStack,
+  VStack,
+  Text,
+  Divider,
+  Button,
+  Image,
+  FlatList,
+  Flex,
+} from "native-base";
 import Colors from "../../../../shared/theme/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
@@ -7,18 +17,19 @@ import { Dimensions } from "react-native";
 import Product from "../../../components/buyer/Product";
 
 const ShopDetails = ({ route, navigation }) => {
-  const { item } = route.params;
+  const { shop } = route.params;
+  const products = shop.product;
   return (
     <Box flex={1}>
       <Box bg={"white"} p={4}>
         <HStack>
           <Box w={90} h={90} bg={"gray.200"} rounded={"lg"}>
             <Image
-              source={{ uri: `${BASE_URL2}/${item.img_url}` }}
-              alt={item.name}
+              source={{ uri: `${BASE_URL2}/${shop.img_url}` }}
+              alt={shop.name}
               w={"full"}
-            h={"full"}
-              resizeMode={'cover'}
+              h={"full"}
+              resizeMode={"cover"}
               rounded={"md"}
             />
           </Box>
@@ -31,14 +42,11 @@ const ShopDetails = ({ route, navigation }) => {
             <Box>
               <VStack>
                 <Text fontFamily={"Poppins_600SemiBold"} fontSize={"lg"}>
-                  {item.store_name}
+                  {shop.store_name}
                 </Text>
               </VStack>
               <HStack>
-                <FontAwesome name="star" size={14} />
-                <FontAwesome name="star" size={14} />
-                <FontAwesome name="star" size={14} />
-                <FontAwesome name="star" size={14} />
+                <Text fontFamily={"Poppins_400Regular"}>{shop.name}</Text>
               </HStack>
             </Box>
             <HStack alignItems={"center"}>
@@ -54,7 +62,7 @@ const ShopDetails = ({ route, navigation }) => {
               </Box>
               <Box pl={"2"}>
                 <Text fontFamily={"Poppins_500Medium"} color={"gray.400"}>
-                  {item.phone_number}
+                  {shop.phone_number}
                 </Text>
               </Box>
             </HStack>
@@ -114,7 +122,25 @@ const ShopDetails = ({ route, navigation }) => {
         </TouchableOpacity>
       </HStack>
       <Box flex={1} mt={4} mb={90} px={4}>
-        <Product />
+        {products.length > 0 ? (
+          <FlatList
+            numColumns={2}
+            renderItem={({ item }) => <Product item={item} press={()=>navigation.navigate('BuyerProductDetailsScreen', {product:item})} />}
+            data={products}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+          />
+        ) : (
+          <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+            <Text
+              fontFamily={"Poppins_600SemiBold"}
+              fontSize={"lg"}
+              color={"gray.400"}
+            >
+              No products added
+            </Text>
+          </Box>
+        )}
       </Box>
     </Box>
   );

@@ -6,6 +6,8 @@ import Home from "./tabs/Home";
 import Messages from "./tabs/Messages";
 import Colors from "../../shared/theme/Colors";
 import Profile from "./tabs/Profile";
+import Cart from "./tabs/Cart";
+import Settings from "./tabs/Settings";
 const Tab = createBottomTabNavigator();
 const BuyerTab = () => {
   return (
@@ -35,20 +37,25 @@ const BuyerTab = () => {
                 size={18}
                 color={focused ? Colors.primary : Colors.secondaryBlue}
               />
-              <Text style={{ color: focused ? Colors.primary : Colors.secondaryBlue, fontFamily:'Poppins_400Regular' }}>
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
                 Home
               </Text>
             </View>
           ),
-          headerShown:false
+          headerShown: false,
         }}
       />
       <Tab.Screen
         name="chat"
         component={Messages}
         options={{
-            tabBarLabel:'Chat',
-            headerShown:false,
+          tabBarLabel: "Chat",
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center" }}>
               <FontAwesome
@@ -56,35 +63,22 @@ const BuyerTab = () => {
                 size={18}
                 color={focused ? Colors.primary : Colors.secondaryBlue}
               />
-              <Text style={{ color: focused ? Colors.primary : Colors.secondaryBlue, fontFamily:'Poppins_400Regular' }}>
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
                 Messages
               </Text>
             </View>
           ),
         }}
       />
+
       <Tab.Screen
-        name="profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: "center" }}>
-              <FontAwesome
-                name="user"
-                size={18}
-                color={focused ? Colors.primary : Colors.secondaryBlue}
-              />
-              <Text style={{ color: focused ? Colors.primary : Colors.secondaryBlue, fontFamily:'Poppins_400Regular', }}>
-                Profile
-              </Text>
-            </View>
-          ),
-          headerShown:false
-        }}
-      />
-      <Tab.Screen
-        name="shop"
-        component={Home}
+        name="Cart"
+        component={Cart}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center" }}>
@@ -93,11 +87,46 @@ const BuyerTab = () => {
                 size={18}
                 color={focused ? Colors.primary : Colors.secondaryBlue}
               />
-              <Text style={{ color: focused ? Colors.primary : Colors.secondaryBlue, fontFamily:'Poppins_400Regular' }}>
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
                 Cart
               </Text>
             </View>
           ),
+          headerTitle: "Cart list",
+          headerTitleAlign: "center",
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: Colors.primary },
+          headerShown: false,
+        }}
+      />
+
+      <Tab.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: "center" }}>
+              <FontAwesome
+                name="cog"
+                size={18}
+                color={focused ? Colors.primary : Colors.secondaryBlue}
+              />
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
+                Settings
+              </Text>
+            </View>
+          ),
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

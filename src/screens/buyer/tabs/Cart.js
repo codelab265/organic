@@ -1,28 +1,30 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "react-native";
 import Colors from "../../../shared/theme/Colors";
+import CartList from "./CartTabs/CartList";
+import Checkout from "./CartTabs/Checkout";
+import SuccessOrder from "./CartTabs/SuccessOrder";
 import ProductDetails from "./HomeTabs/ProductDetails";
 import ShopDetail from "./HomeTabs/ShopDetail";
-import Shops from "./HomeTabs/Shops";
 
 const Stack = createStackNavigator();
 
-const Home = () => {
+const Cart = () => {
   return (
-    <Stack.Navigator initialRouteName="buyerShopScreen">
+    <Stack.Navigator initialRouteName="BuyerCartScreen">
       <Stack.Screen
-        name="buyerShopScreen"
-        component={Shops}
+        name="BuyerCartScreen"
+        component={CartList}
         options={{
           headerShown: false,
           headerStyle: { backgroundColor: Colors.primary },
         }}
       />
       <Stack.Screen
-        name="BuyerShopDetailsScreen"
-        component={ShopDetail}
+        name="BuyerCheckoutScreen"
+        component={Checkout}
         options={{
-          headerTitle: "Shop Details",
+          headerTitle: "Checkout",
           headerStyle: { backgroundColor: Colors.primary },
           headerTitleStyle: { color: "white", fontFamily: "Poppins_500Medium" },
         }}
@@ -36,8 +38,15 @@ const Home = () => {
           headerTitleStyle: { color: "white", fontFamily: "Poppins_500Medium" },
         }}
       />
+      <Stack.Screen
+        name="BuyerSuccessOrderScreen"
+        component={SuccessOrder}
+        options={{
+          headerShown:false,
+        }}
+      />
     </Stack.Navigator>
   );
 };
 
-export default Home;
+export default Cart;
