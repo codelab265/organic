@@ -1,49 +1,58 @@
-import { Avatar, Badge, Box, Divider, HStack, Text, VStack } from "native-base";
-import React from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useIsFocused } from "@react-navigation/native";
+import axios from "axios";
+import { Box, Center, Image, Spinner, Text } from "native-base";
+import React, { useState, useEffect } from "react";
+import { Alert, FlatList } from "react-native";
+import { useAuthContext } from "../../../../context/AuthContext";
 import Colors from "../../../../shared/theme/Colors";
+import ChatListItem from "../../../components/ChatListItem";
+import EmptyImage from "../../../../assets/img/empty.png";
+import { FontAwesome } from "@expo/vector-icons";
 
-const ChatList = () => {
+const ChatList = ({navigation}) => {
+  const [conversations, setConversations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const isFocused = useIsFocused();
+  const { userDetails } = useAuthContext();
+  const buyerId = userDetails.id;
+
+  useEffect(() => {
+    getConversations();
+  }, [isFocused]);
+
+  const getConversations = () => {
+    setLoading(true);
+    axios
+      .get(`${BASE_URL}/buyer/conversations/${buyerId}`)
+      .then((response) => {
+        setLoading(false);
+        setConversations(response.data);
+        
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error);
+        Alert.alert("error", "Something went wrong");
+      });
+  };
+
   return (
     <Box flex={1} mb={90} p={4}>
-      <TouchableOpacity>
-        <HStack justifyContent={"space-evenly"}>
-          <Box>
-            <Avatar size={"lg"}></Avatar>
-          </Box>
-          <VStack
-            px={2}
-            flex={1}
-            overflow={"hidden"}
-            flexWrap={"nowrap"}
-            justifyContent={"center"}
-          >
-            <Text
-              fontFamily={"Poppins_600SemiBold"}
-              fontSize={"md"}
-              color={Colors.blue}
-            >
-              Mphatso Mlenga
-            </Text>
-            <Box>
-              <Text
-                fontFamily={"Poppins_400Regular"}
-                color={"gray.500"}
-                isTruncated
-              >
-                lorem dkjfsdjfhsd jksldksd sjhdjskhfjsdhfjdf
-              </Text>
-            </Box>
-          </VStack>
-          <VStack alignItems={"flex-end"} justifyContent={"center"}>
-            <Text fontFamily={"Poppins_400Regular"} color={"gray.500"}>2 seconds ago</Text>
-            <Badge bg={Colors.secondary} rounded={"full"} mt={1}>
-              4
-            </Badge>
-          </VStack>
-        </HStack>
-        <Divider mt={2} />
-      </TouchableOpacity>
+
+      {!loading && conversations.length === 0 ? (
+        <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+          <FontAwesome name="comment" size={50} color={Colors.primaryDark} />
+          <Text fontFamily={"Poppins_400Regular"} mt={4}>
+            No conversations yet
+          </Text>
+        </Box>
+      ) : (
+        <FlatList
+          data={conversations}
+          renderItem={({ item }) => <ChatListItem item={item} onPress={()=>navigation.navigate('MessagingScreen', {seller:item.seller})} />}
+          keyExtractor={(item) => item.id}
+        />
+      )}
     </Box>
   );
 };

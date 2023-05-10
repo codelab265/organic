@@ -5,11 +5,12 @@ import { useAuthContext } from "../../../context/AuthContext";
 import Colors from "../../../shared/theme/Colors";
 
 const Profile = ({navigation}) => {
-  const { userDetails } = useAuthContext();
+  const { userDetails, setIsLogged } = useAuthContext();
 
   const Logout = async() => {
     await AsyncStorage.removeItem('user')
     await AsyncStorage.removeItem('login')
+    setIsLogged("false");
     navigation.reset({ index: 0, routes: [{ name: "UserTypeScreen" }] })
   }
   return (

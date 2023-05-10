@@ -9,16 +9,47 @@ import {
   Image,
   FlatList,
   Flex,
+  Center,
+  Spinner,
 } from "native-base";
 import Colors from "../../../../shared/theme/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { Dimensions } from "react-native";
 import Product from "../../../components/buyer/Product";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import { Alert } from "react-native";
 
 const ShopDetails = ({ route, navigation }) => {
+  const [products, setProducts] = useState([]);
   const { shop } = route.params;
-  const products = shop.product;
+  const [loading, setLoading] = useState(false);
+  const isFocused = useIsFocused();
+
+  const nav = useNavigation();
+
+  useEffect(() => {
+    getProduct();
+  }, [isFocused]);
+
+  const getProduct = () => {
+    setLoading(true);
+    axios
+      .get(`${BASE_URL}/buyer/products/${shop.id}`)
+      .then((response) => {
+        setLoading(false);
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        setLoading(false);
+        Alert.alert("error", "Something went wrong while getting the products");
+        console.error(error);
+      });
+  };
+
   return (
     <Box flex={1}>
       <Box bg={"white"} p={4}>
@@ -70,7 +101,9 @@ const ShopDetails = ({ route, navigation }) => {
         </HStack>
         <Divider my={4} />
         <HStack justifyContent={"space-evenly"} w={"full"}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => nav.navigate("MessagingScreen", { seller: shop })}
+          >
             <HStack
               bg={Colors.blue}
               rounded={"full"}
@@ -85,7 +118,15 @@ const ShopDetails = ({ route, navigation }) => {
               </Text>
             </HStack>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("BuyerShopLocationScreen", {
+                latitude: shop.latitude,
+                longitude:shop.longitude,
+                storeName:shop.store_name
+              })
+            }
+          >
             <HStack
               bg={Colors.orange}
               rounded={"full"}
@@ -122,15 +163,12 @@ const ShopDetails = ({ route, navigation }) => {
         </TouchableOpacity>
       </HStack>
       <Box flex={1} mt={4} mb={90} px={4}>
-        {products.length > 0 ? (
-          <FlatList
-            numColumns={2}
-            renderItem={({ item }) => <Product item={item} press={()=>navigation.navigate('BuyerProductDetailsScreen', {product:item})} />}
-            data={products}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-          />
-        ) : (
+        {loading && (
+          <Center>
+            <Spinner size={"sm"} />
+          </Center>
+        )}
+        {!loading && products.length === 0 ? (
           <Box flex={1} justifyContent={"center"} alignItems={"center"}>
             <Text
               fontFamily={"Poppins_600SemiBold"}
@@ -140,6 +178,23 @@ const ShopDetails = ({ route, navigation }) => {
               No products added
             </Text>
           </Box>
+        ) : (
+          <FlatList
+            numColumns={2}
+            renderItem={({ item }) => (
+              <Product
+                item={item}
+                press={() =>
+                  navigation.navigate("BuyerProductDetailsScreen", {
+                    product: item,
+                  })
+                }
+              />
+            )}
+            data={products}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+          />
         )}
       </Box>
     </Box>

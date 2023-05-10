@@ -1,5 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import Colors from "../../../shared/theme/Colors";
+import Chat from "./MessagesTabs/Chat";
 import ChatList from "./MessagesTabs/ChatList";
 import EditProfile from "./ProfileTabs/EditProfile";
 
@@ -10,7 +11,7 @@ const Messages = () => {
   return (
     <Stack.Navigator initialRouteName="buyerChatListScreen">
       <Stack.Screen
-        name="buyerChatListScreen"
+        name="BuyerChatListScreen"
         component={ChatList}
         options={{
           headerTitle:"Chat List",
@@ -20,12 +21,10 @@ const Messages = () => {
         }}
       />
       <Stack.Screen
-        name="buyerEditProfileScreen"
-        component={EditProfile}
+        name="BuyerChatScreen"
+        component={Chat}
         options={{
-          headerTitle: "Edit profile",
-          headerStyle: { backgroundColor: Colors.primary },
-          headerTitleStyle: { color: "white", fontFamily: "Poppins_500Medium" },
+          headerShown:false
         }}
       />
     </Stack.Navigator>

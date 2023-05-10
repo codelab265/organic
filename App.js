@@ -35,6 +35,8 @@ import Colors from "./src/shared/theme/Colors";
 import { Client } from "rollbar-react-native";
 import UserType from "./src/UserType";
 import { CartContextProvider } from "./src/context/CartContext";
+import Chat from "./src/screens/buyer/tabs/MessagesTabs/Chat";
+import ShopLocation from "./src/screens/buyer/tabs/HomeTabs/ShopLocation";
 const rollbar = new Client("5b429c1de9a441c3b50ecda15998fe26");
 
 const Stack = createStackNavigator();
@@ -115,6 +117,24 @@ export default function App() {
                   name="SellerTabs"
                   component={SellerTab}
                   options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="BuyerShopLocationScreen"
+                  component={ShopLocation}
+                  options={{
+                    // headerStyle: { backgroundColor: Colors.primary },
+                    // headerTitleStyle: { color: "white" },
+                    // headerTitle: "Shop Location",
+                    // headerTitleAlign: "center",
+                    headerShown:false
+                  }}
+                />
+                <Stack.Screen
+                  name="MessagingScreen"
+                  component={Chat}
+                  options={{
+                    headerShown: false,
+                  }}
                 />
               </Stack.Navigator>
             </NavigationContainer>

@@ -40,6 +40,9 @@ export const AuthProvider = ({ children }) => {
         const data = await AsyncStorage.getItem("user");
         setUserDetails(JSON.parse(data));
         console.log('done');
+      }else{
+        setUserDetails([]);
+        console.log('success');
       }
       
     })();
@@ -59,7 +62,6 @@ export const AuthProvider = ({ children }) => {
       .get(`${BASE_URL}/buyer/categories`)
       .then((response) => {
         setCategories(response.data);
-        console.log(response.data);
         setAuthLoading(false);
       })
       .catch((error) => {

@@ -10,6 +10,14 @@ import Cart from "./tabs/Cart";
 import Settings from "./tabs/Settings";
 const Tab = createBottomTabNavigator();
 const BuyerTab = () => {
+  const tabVisibility = (route)=>{
+    const routeName = route.state?route.state.routes[route.state.index].name:'';
+    if(routeName=="BuyerChatScreen"){
+      return true;
+    }
+
+    return false;
+  }
   return (
     <Tab.Navigator
       screenOptions={{
@@ -51,9 +59,9 @@ const BuyerTab = () => {
         }}
       />
       <Tab.Screen
-        name="chat"
+        name="BuyerChat"
         component={Messages}
-        options={{
+        options={({route})=>({
           tabBarLabel: "Chat",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -73,7 +81,7 @@ const BuyerTab = () => {
               </Text>
             </View>
           ),
-        }}
+        })}
       />
 
       <Tab.Screen
@@ -101,7 +109,6 @@ const BuyerTab = () => {
           headerTitleAlign: "center",
           headerTintColor: "white",
           headerStyle: { backgroundColor: Colors.primary },
-          headerShown: false,
         }}
       />
 

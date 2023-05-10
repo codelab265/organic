@@ -5,8 +5,15 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import Colors from "../../../../shared/theme/Colors";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const SettingsDetails = ({navigation}) => {
-  const { userDetails } = useAuthContext();
+  const { userDetails,setIsLogged } = useAuthContext();
+  const Logout = async() => {
+    await AsyncStorage.removeItem('user')
+    await AsyncStorage.removeItem('login')
+    setIsLogged("false");
+    navigation.reset({ index: 0, routes: [{ name: "UserTypeScreen" }] })
+  }
   return (
     <Box flex={1} px={4}>
       <Box flex={1} justifyContent={"center"} alignItems={"center"}>
@@ -25,7 +32,7 @@ const SettingsDetails = ({navigation}) => {
           {userDetails.email}
         </Text>
 
-        <Button rounded={"full"} px={8} bg={Colors.secondary} mt={4}>
+        <Button rounded={"full"} px={8} bg={Colors.secondary} mt={4} onPress={Logout}>
           <Text fontFamily={"Poppins_500Medium"}>Logout</Text>
         </Button>
       </Box>

@@ -19,9 +19,12 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Alert } from "react-native";
 import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuthContext } from "../../context/AuthContext";
 
 const BuyerLogin = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
+  const { setIsLogged } = useAuthContext();
 
   const validationSchema = Yup.object({
     email: Yup.string().required().email(),
@@ -43,6 +46,7 @@ const BuyerLogin = ({ navigation }) => {
           const data = JSON.stringify(response.data.data);
           await AsyncStorage.setItem("user", data);
           await AsyncStorage.setItem("login", "true");
+          setIsLogged("true");
             navigation.reset({index:0, routes:[{name: "BuyerTabs"}]})
         }
       })

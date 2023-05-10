@@ -6,6 +6,7 @@ import Colors from "../../../../shared/theme/Colors";
 import { useCartContext } from "../../../../context/CartContext";
 import { useState } from "react";
 import { Alert } from "react-native";
+import { ToastAndroid } from "react-native";
 
 const ProductDetails = ({ route, navigation }) => {
   const { product } = route.params;
@@ -83,6 +84,10 @@ const ProductDetails = ({ route, navigation }) => {
                   bg={Colors.primaryDark}
                   isDisabled={productInCart()}
                   onPress={() => {
+                    if(quantity>=product.quantity){
+                      ToastAndroid.show('Out of stock', ToastAndroid.LONG);
+                      return;
+                    }
                     const newQty = parseInt(quantity) + 1;
                     setQuantity(newQty.toString());
                   }}
@@ -105,7 +110,7 @@ const ProductDetails = ({ route, navigation }) => {
                     });
 
                     setQuantity("0");
-                    Alert.alert('message', 'Added successfully');
+                   ToastAndroid.show('Added to cart', ToastAndroid.LONG);
                     navigation.goBack();
                   }}
                 >
