@@ -9,13 +9,13 @@ import { Button } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Colors from "../../../../shared/theme/Colors";
 
-const ShopLocation = ({navigation}) => {
+const ShopLocation = ({ navigation }) => {
   const route = useRoute();
 
   const { longitude, latitude, storeName } = route.params;
   const origin = { latitude: 37.3318456, longitude: -122.0296002 };
   const destination = { latitude: 37.771707, longitude: -122.4053769 };
-  const GOOGLE_MAPS_API_KEY = "AIzaSyD5oupGUsRySJ3bcL2yX73oLA7akhI8S40";
+  const GOOGLE_MAPS_API_KEY = "AIzaSyBTlhMRAsx6GkWJPIgEzXvOl2yv0BY5fFQ";
 
   return (
     <View style={styles.container}>
@@ -28,8 +28,8 @@ const ShopLocation = ({navigation}) => {
         bg={Colors.primary}
         shadow={3}
         borderWidth={1}
-        borderColor={'white'}
-        onPress={()=>navigation.goBack()}
+        borderColor={"white"}
+        onPress={() => navigation.goBack()}
       >
         <FontAwesome5 name="arrow-left" size={24} color={"white"} />
       </Button>
@@ -43,7 +43,12 @@ const ShopLocation = ({navigation}) => {
           longitudeDelta: 0.0421,
         }}
       >
-        <Marker
+        <MapViewDirections
+          origin={origin}
+          destination={destination}
+          apikey={GOOGLE_MAPS_API_KEY}
+        />
+        {/* <Marker
           coordinate={{
             latitude: parseFloat(latitude),
             longitude: parseFloat(longitude),
@@ -57,7 +62,7 @@ const ShopLocation = ({navigation}) => {
           radius={500}
           strokeWidth={3}
           strokeColor={"red"}
-        />
+        /> */}
       </MapView>
     </View>
   );

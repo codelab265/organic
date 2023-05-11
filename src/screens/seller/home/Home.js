@@ -1,3 +1,6 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { TouchableOpacity, FlatList } from "react-native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import {
   Avatar,
   Box,
@@ -8,33 +11,25 @@ import {
   Text,
   VStack,
 } from "native-base";
-import React from "react";
-import { View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Colors from "../../../shared/theme/Colors";
-import OrderImage from "../../../assets/img/order.png";
-import Product from "../../components/buyer/Product";
-import { useEffect } from "react";
 import axios from "axios";
-import { useAuthContext } from "../../../context/AuthContext";
-import { useState } from "react";
+import Colors from "../../../shared/theme/Colors";
+import Product from "../../components/buyer/Product";
 import EmptyImage from "../../../assets/img/empty.png";
-import { FlatList } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
+import OrderImage from "../../../assets/img/order.png";
+import { useAuthContext } from "../../../context/AuthContext";
+import OrderItem from "../../components/seller/OrderItem";
 
-const Home = ({ navigation }) => {
+const Home = () => {
   const { userDetails } = useAuthContext();
-  const userID = userDetails.id;
+  const userID = useMemo(() => userDetails.id, [userDetails.id]);
   const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [orderLoading, setOrderLoading] = useState(false);
   const [productLoading, setProductLoading] = useState(false);
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    getProducts();
-  }, [isFocused]);
-
-  const getProducts = () => {
+  const getProducts = useCallback(() => {
     setProductLoading(true);
     axios
       .get(`${BASE_URL}/seller/products/${userID}`)
@@ -46,29 +41,48 @@ const Home = ({ navigation }) => {
         setProductLoading(false);
         console.log(error);
       });
-  };
+  }, [userID]);
+
+  useEffect(() => {
+   
+    getOrders();
+  }, [getOrders]);
+
+  useEffect(() => {
+    getProducts();
+  }, [getProducts,isFocused]);
+
+  const getOrders = useCallback(() => {
+    setOrderLoading(true);
+    axios
+      .get(`${BASE_URL}/seller/orders/${userID}`)
+      .then((response) => {
+        const OrderData = response.data;
+        setOrders(OrderData.slice(0, 2));
+        setOrderLoading(false);
+      })
+      .catch((error) => {
+        setOrderLoading(false);
+        console.log(error);
+      });
+  }, [userID]);
 
   return (
     <Box flex={1} mb={90}>
       <Box px={4} py={8} bg={Colors.primary} roundedBottom={"2xl"}>
         <HStack alignItems={"center"} justifyContent={"space-between"}>
           <VStack>
-            <Text fontFamily={"Poppins_400Regular"} color={"white"}>
+            <Text fontFamily={"Poppins_400Regular"} color={"white"} fontSize={'md'}>
               Welcome,{" "}
             </Text>
             <Text
               fontFamily={"Poppins_600SemiBold"}
               color={"white"}
-              fontSize={"md"}
+              fontSize={"lg"}
             >
               {userDetails.name}
             </Text>
           </VStack>
-          <Box>
-            <TouchableOpacity>
-              <Avatar size={"sm"} source={{ uri:`${BASE_URL2}/${userDetails.img_url}` }} />
-            </TouchableOpacity>
-          </Box>
         </HStack>
       </Box>
       <Box>
@@ -83,36 +97,55 @@ const Home = ({ navigation }) => {
             color={Colors.primaryBlue}
             fontSize={"md"}
           >
-            Available Orders
+            Recent Orders
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('SellerOrdersScreen')}>
             <Text fontFamily={"Poppins_400Regular"} color={Colors.primaryDark}>
               See all
             </Text>
           </TouchableOpacity>
         </HStack>
         <Box mt={4} px={4}>
-          <VStack
-            h={180}
-            w={"full"}
-            bg={"white"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            overflow={"hidden"}
-            rounded={"lg"}
-          >
-            <Center p={10}>
-              <Image
-                source={OrderImage}
-                w={120}
-                height={120}
-                alt={"empty shop"}
-              />
-              <Text fontFamily={"Poppins_400Regular"} color={Colors.primary}>
-                You dont have any order
-              </Text>
+          {orderLoading && (
+            <Center>
+              <Spinner size={"sm"} />
             </Center>
-          </VStack>
+          )}
+          {!orderLoading && orders.length === 0 ? (
+            <VStack
+              h={180}
+              w={"full"}
+              bg={"white"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              overflow={"hidden"}
+              rounded={"lg"}
+            >
+              <Center p={10}>
+                <Image
+                  source={OrderImage}
+                  w={120}
+                  height={120}
+                  alt={"empty shop"}
+                />
+                <Text fontFamily={"Poppins_400Regular"} color={Colors.primary}>
+                  You dont have any order
+                </Text>
+              </Center>
+            </VStack>
+          ) : (
+            orders.map((item, index) => (
+              <OrderItem
+                order={item}
+                key={item.id}
+                onPress={() =>
+                  navigation.navigate("SellerOrderDetailsScreen", {
+                    order: item,
+                  })
+                }
+              />
+            ))
+          )}
         </Box>
       </Box>
       <Box flex={1}>
@@ -135,7 +168,7 @@ const Home = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </HStack>
-        <Box flex={1} mt={4} px={4} justifyContent={'center'}>
+        <Box flex={1} mt={4} px={4} justifyContent={"center"}>
           {productLoading && (
             <Spinner size={"sm"} color={Colors.primaryDark} mb={1} />
           )}
@@ -159,8 +192,6 @@ const Home = ({ navigation }) => {
               data={products}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
-             
-              
             />
           )}
         </Box>

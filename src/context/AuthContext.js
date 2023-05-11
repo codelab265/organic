@@ -16,9 +16,8 @@ export const AuthProvider = ({ children }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [granted, setGranted] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [isLogged, setIsLogged] = useState('');
+  const [isLogged, setIsLogged] = useState("");
   const [userDetails, setUserDetails] = useState([]);
-  
 
   useEffect(() => {
     (async () => {
@@ -35,16 +34,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       const getLogin = await AsyncStorage.getItem("login");
-      if (getLogin=="true") {
-        setIsLogged('true');
+      if (getLogin == "true") {
+        setIsLogged("true");
         const data = await AsyncStorage.getItem("user");
         setUserDetails(JSON.parse(data));
-        console.log('done');
-      }else{
-        setUserDetails([]);
-        console.log('success');
+        console.log("done");
+      } else {
+        setIsLogged("false");
       }
-      
     })();
     getCategories();
   }, [isLogged]);
@@ -62,6 +59,7 @@ export const AuthProvider = ({ children }) => {
       .get(`${BASE_URL}/buyer/categories`)
       .then((response) => {
         setCategories(response.data);
+        console.log(response.data);
         setAuthLoading(false);
       })
       .catch((error) => {
@@ -126,7 +124,8 @@ export const AuthProvider = ({ children }) => {
         categories,
         login,
         logout,
-        setIsLogged
+        setIsLogged,
+        setUserDetails
       }}
     >
       {children}

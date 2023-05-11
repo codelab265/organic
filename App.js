@@ -37,6 +37,7 @@ import UserType from "./src/UserType";
 import { CartContextProvider } from "./src/context/CartContext";
 import Chat from "./src/screens/buyer/tabs/MessagesTabs/Chat";
 import ShopLocation from "./src/screens/buyer/tabs/HomeTabs/ShopLocation";
+import SellerChat from "./src/screens/seller/messages/Chat";
 const rollbar = new Client("5b429c1de9a441c3b50ecda15998fe26");
 
 const Stack = createStackNavigator();
@@ -132,6 +133,13 @@ export default function App() {
                 <Stack.Screen
                   name="MessagingScreen"
                   component={Chat}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="SellerMessagingScreen"
+                  component={SellerChat}
                   options={{
                     headerShown: false,
                   }}

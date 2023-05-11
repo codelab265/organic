@@ -8,6 +8,8 @@ import AddProduct from "./home/AddProduct";
 import { Box } from "native-base";
 import { TouchableOpacity } from "react-native";
 import Profile from "./profile/Profile";
+import HomeTab from "./HomeTab";
+import MessagesTab from "./MessagesTab";
 
 const Tab = createBottomTabNavigator();
 const BuyerTab = () => {
@@ -49,7 +51,7 @@ const BuyerTab = () => {
     >
       <Tab.Screen
         name="home"
-        component={Home}
+        component={HomeTab}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center" }}>
@@ -74,9 +76,9 @@ const BuyerTab = () => {
 
       <Tab.Screen
         name="chat"
-        component={Home}
+        component={MessagesTab}
         options={{
-          tabBarLabel: "Chat",
+          tabBarLabel: "Chat list",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center" }}>
