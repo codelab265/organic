@@ -10,6 +10,8 @@ import { TouchableOpacity } from "react-native";
 import Profile from "./profile/Profile";
 import HomeTab from "./HomeTab";
 import MessagesTab from "./MessagesTab";
+import { StatusBar } from "expo-status-bar";
+import ProductsTab from "./ProductsTab";
 
 const Tab = createBottomTabNavigator();
 const BuyerTab = () => {
@@ -34,6 +36,8 @@ const BuyerTab = () => {
     </TouchableOpacity>
   );
   return (
+    <>
+    
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: {
@@ -116,6 +120,30 @@ const BuyerTab = () => {
         }}
       />
       <Tab.Screen
+        name="shop"
+        component={ProductsTab}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <View style={{ alignItems: "center" }}>
+              <FontAwesome
+                name="tag"
+                size={18}
+                color={focused ? Colors.primary : Colors.secondaryBlue}
+              />
+              <Text
+                style={{
+                  color: focused ? Colors.primary : Colors.secondaryBlue,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
+                Products
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
         name="profile"
         component={Profile}
         options={{
@@ -139,30 +167,9 @@ const BuyerTab = () => {
           headerShown: false,
         }}
       />
-      <Tab.Screen
-        name="shop"
-        component={Home}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={{ alignItems: "center" }}>
-              <FontAwesome
-                name="shopping-bag"
-                size={18}
-                color={focused ? Colors.primary : Colors.secondaryBlue}
-              />
-              <Text
-                style={{
-                  color: focused ? Colors.primary : Colors.secondaryBlue,
-                  fontFamily: "Poppins_400Regular",
-                }}
-              >
-                Cart
-              </Text>
-            </View>
-          ),
-        }}
-      />
+      
     </Tab.Navigator>
+    </>
   );
 };
 

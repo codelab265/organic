@@ -35,22 +35,13 @@ const Home = () => {
       .get(`${BASE_URL}/seller/products/${userID}`)
       .then((response) => {
         setProductLoading(false);
-        setProducts(response.data);
+        setProducts(response.data.slice(0,4));
       })
       .catch((error) => {
         setProductLoading(false);
         console.log(error);
       });
   }, [userID]);
-
-  useEffect(() => {
-   
-    getOrders();
-  }, [getOrders]);
-
-  useEffect(() => {
-    getProducts();
-  }, [getProducts,isFocused]);
 
   const getOrders = useCallback(() => {
     setOrderLoading(true);
@@ -66,6 +57,13 @@ const Home = () => {
         console.log(error);
       });
   }, [userID]);
+
+  useEffect(() => {
+    getProducts();
+    getOrders();
+  }, [getProducts,getOrders,isFocused]);
+
+  
 
   return (
     <Box flex={1} mb={90}>
@@ -192,6 +190,7 @@ const Home = () => {
               data={products}
               keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
+              
             />
           )}
         </Box>

@@ -15,7 +15,7 @@ const ShopLocation = ({ navigation }) => {
   const { longitude, latitude, storeName } = route.params;
   const origin = { latitude: 37.3318456, longitude: -122.0296002 };
   const destination = { latitude: 37.771707, longitude: -122.4053769 };
-  const GOOGLE_MAPS_API_KEY = "AIzaSyBTlhMRAsx6GkWJPIgEzXvOl2yv0BY5fFQ";
+  const GOOGLE_MAPS_API_KEY = "AIzaSyC8j-IZVb2umGVf7x-V3lI8FOcDj31Bnis";
 
   return (
     <View style={styles.container}>

@@ -8,7 +8,7 @@ import {
   TextField,
 } from "native-base";
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { ToastAndroid, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -76,8 +76,7 @@ const AddProduct = () => {
       const response = await axios.request(config);
 
       console.log(response.data.data);
-      Alert.alert("Message", "Added successfully");
-      setImage("");
+      ToastAndroid.show("Added successfully", ToastAndroid.LONG);
       setLoading(false);
     } catch (error) {
       setLoading(false);
