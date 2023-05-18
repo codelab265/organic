@@ -22,7 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuthContext } from "../../context/AuthContext";
 const SellerLogin = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  const { setIsLogged } = useAuthContext();
+  const { setIsLogged, setUserDetails } = useAuthContext();
 
   const validationSchema = Yup.object({
     email: Yup.string().required().email(),
@@ -41,11 +41,27 @@ const SellerLogin = ({ navigation }) => {
         if (response.data.status == "error") {
           Alert.alert("error", response.data.data);
         } else {
-          const data = JSON.stringify(response.data.data);
-          await AsyncStorage.setItem("user", data);
+          const data = response.data.data;
+          const { is_verified, is_active } = data;
+
+          await AsyncStorage.setItem("user", JSON.stringify(data));
           await AsyncStorage.setItem("login", "true");
           setIsLogged("true");
-          navigation.reset({ index: 0, routes: [{ name: "SellerTabs" }] });
+          setUserDetails(data);
+
+          if (is_verified && is_active) {
+            navigation.reset({ index: 0, routes: [{ name: "SellerTabs" }] });
+          } else if (!is_verified) {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "SellerVerificationScreen" }],
+            });
+          } else if (is_verified && !is_active) {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "SellerPendingScreen" }],
+            });
+          }
         }
       })
       .catch((error) => {

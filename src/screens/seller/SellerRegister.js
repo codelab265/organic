@@ -25,10 +25,12 @@ import { Alert } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ToastAndroid } from "react-native";
 
 const SellerRegister = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const FormData = global.FormData;
+
   useEffect(() => {
     (async () => {
       let location = await Location.getCurrentPositionAsync({});
@@ -38,7 +40,7 @@ const SellerRegister = ({ navigation }) => {
 
   const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
-  const { categories } = useAuthContext();
+  const { categories, setIsLogged, setUserDetails } = useAuthContext();
   const [loading, setLoading] = useState(false);
 
   const validation = Yup.object({
@@ -51,7 +53,7 @@ const SellerRegister = ({ navigation }) => {
     imageUrl: Yup.object().required("Image is required"),
   });
 
-  const handleRegister = async (values) => {
+  const handleRegister = async (values, resetForm) => {
     setLoading(true);
     try {
       const formData = new FormData();
@@ -73,7 +75,7 @@ const SellerRegister = ({ navigation }) => {
       const type = match ? `image/${match[1]}` : `image`;
       const img = { uri: uri, name: `image.${ext}`, type: type };
       console.log(img);
-      formData.append("image_uri", img);
+      formData.append("seller_image", img);
 
       const config = {
         method: "POST",
@@ -84,6 +86,7 @@ const SellerRegister = ({ navigation }) => {
           // if backend supports u can use gzip request encoding
           // "Content-Encoding": "gzip",
         },
+        responseType: "json",
         transformRequest: (data, headers) => {
           // !!! override data to return formData
           // since axios converts that to string
@@ -95,17 +98,17 @@ const SellerRegister = ({ navigation }) => {
 
       const response = await axios.request(config);
 
-      console.log(response.data.data);
-      Alert.alert("Message", "Registers successfully");
+      setUserDetails(response.data.data)
+      setIsLogged("true");
       setLoading(false);
-      const data = JSON.stringify(response.data.data);
-      await AsyncStorage.setItem("user", data);
-      await AsyncStorage.setItem("login", "true");
-      navigation.reset({ index: 0, routes: [{ name: "SellerTabs" }] });
+      resetForm();
+      ToastAndroid.show("Registered successfully. Please wait for the administrator to activate your account", ToastAndroid.LONG)
+      navigation.reset({index:0, routes:[{name:'SellerVerificationScreen'}]})
     } catch (error) {
       setLoading(false);
       console.error("Registration failed:", error.message);
       throw error;
+
       // Handle error, e.g. display error message
     }
   };
@@ -175,8 +178,8 @@ const SellerRegister = ({ navigation }) => {
               }}
               validationSchema={validation}
               onSubmit={(values, { resetForm }) => {
-                handleRegister(values);
-                resetForm();
+                handleRegister(values, resetForm);
+                
               }}
             >
               {({
@@ -393,7 +396,7 @@ const SellerRegister = ({ navigation }) => {
               ALREADY HAVE AN ACCOUNT?
             </Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate("SellerLogin")}
+              onPress={() => navigation.navigate("SellerVerificationScreen")}
             >
               <Text
                 color={"#86B084"}

@@ -24,7 +24,7 @@ import { useAuthContext } from "../../context/AuthContext";
 
 const BuyerRegister = ({ navigation }) => {
   const [loading, setLoading] = useState();
-  const { setIsLogged } = useAuthContext();
+  const { setIsLogged, setUserDetails } = useAuthContext();
   const FormData = global.FormData;
 
   const validation = Yup.object({
@@ -51,6 +51,7 @@ const BuyerRegister = ({ navigation }) => {
         await AsyncStorage.setItem("user", JSON.stringify(data));
         await AsyncStorage.setItem("login", "true");
         setIsLogged("true");
+        setUserDetails(response.data.data);
         navigation.reset({ index: 0, routes: [{ name: "BuyerTabs" }] });
       })
       .catch((error) => {

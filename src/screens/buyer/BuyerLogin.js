@@ -46,7 +46,7 @@ const BuyerLogin = ({ navigation }) => {
           const data = JSON.stringify(response.data.data);
           await AsyncStorage.setItem("user", data);
           await AsyncStorage.setItem("login", "true");
-          // setIsLogged("true");
+          setIsLogged("true");
           setUserDetails(response.data.data);
 
             navigation.reset({index:0, routes:[{name: "BuyerTabs"}]})
@@ -173,6 +173,7 @@ const BuyerLogin = ({ navigation }) => {
                     keyboardType={"default"}
                     fontSize={"md"}
                     fontFamily={"Poppins_400Regular"}
+                    secureTextEntry={true}
                     p={"3"}
                     InputLeftElement={
                       <Box ml={2}>

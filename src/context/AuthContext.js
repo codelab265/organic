@@ -35,10 +35,27 @@ export const AuthProvider = ({ children }) => {
     (async () => {
       const getLogin = await AsyncStorage.getItem("login");
       if (getLogin == "true") {
-        setIsLogged("true");
         const data = await AsyncStorage.getItem("user");
-        setUserDetails(JSON.parse(data));
-        console.log("done");
+        const user = JSON.parse(data);
+        if (user.role == 2) {
+          axios
+            .get(`${BASE_URL}/seller/details/${user.id}`)
+            .then((response) => {
+              const Data = response.data.data;
+              setUserDetails(Data);
+              setAuthLoading(false);
+              setIsLogged("true")
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          setUserDetails(user);
+          setAuthLoading(false);
+          setIsLogged("true")
+          console.log("done");
+
+        }
       } else {
         setIsLogged("false");
       }
@@ -59,8 +76,6 @@ export const AuthProvider = ({ children }) => {
       .get(`${BASE_URL}/buyer/categories`)
       .then((response) => {
         setCategories(response.data);
-        console.log(response.data);
-        setAuthLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -125,7 +140,8 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         setIsLogged,
-        setUserDetails
+        setUserDetails,
+        setAuthLoading,
       }}
     >
       {children}

@@ -71,6 +71,7 @@ const Login = ({ navigation }) => {
               rounded={"lg"}
               placeholder={"Password"}
               keyboardType={"default"}
+              secureTextEntry={true}
               fontSize={"lg"}
               p={"3"}
               InputLeftElement={

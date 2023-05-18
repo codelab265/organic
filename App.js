@@ -38,6 +38,8 @@ import { CartContextProvider } from "./src/context/CartContext";
 import Chat from "./src/screens/buyer/tabs/MessagesTabs/Chat";
 import ShopLocation from "./src/screens/buyer/tabs/HomeTabs/ShopLocation";
 import SellerChat from "./src/screens/seller/messages/Chat";
+import SellerVerification from "./src/screens/seller/SellerVerification";
+import SellerPending from "./src/screens/seller/SellerPending";
 const rollbar = new Client("5b429c1de9a441c3b50ecda15998fe26");
 
 const Stack = createStackNavigator();
@@ -110,10 +112,38 @@ export default function App() {
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen
+                  name="SellerVerificationScreen"
+                  component={SellerVerification}
+                  options={{ 
+                    headerStyle:{
+                      backgroundColor:Colors.primary,
+                    },
+                    headerTitle:'Verification',
+                    headerTitleAlign:'center',
+                    headerTitleStyle:{color:'white'}
+                   }}
+                  
+                />
+                <Stack.Screen
+                  name="SellerPendingScreen"
+                  component={SellerPending}
+                  options={{ 
+                    headerStyle:{
+                      backgroundColor:Colors.primary,
+                    },
+                    headerTitle:'Pending',
+                    headerTitleAlign:'center',
+                    headerTitleStyle:{color:'white'}
+                   }}
+                  
+                />
+                
+                <Stack.Screen
                   name="BuyerTabs"
                   component={BuyerTab}
                   options={{ headerShown: false }}
                 />
+
                 <Stack.Screen
                   name="SellerTabs"
                   component={SellerTab}
