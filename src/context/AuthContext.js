@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
   }, [location]);
 
   useEffect(() => {
+    
     (async () => {
       const getLogin = await AsyncStorage.getItem("login");
       if (getLogin == "true") {
@@ -47,6 +48,7 @@ export const AuthProvider = ({ children }) => {
               setIsLogged("true")
             })
             .catch((error) => {
+              setAuthLoading(false);
               console.error(error);
             });
         } else {
@@ -57,6 +59,7 @@ export const AuthProvider = ({ children }) => {
 
         }
       } else {
+        setAuthLoading(false);
         setIsLogged("false");
       }
     })();
@@ -76,6 +79,7 @@ export const AuthProvider = ({ children }) => {
       .get(`${BASE_URL}/buyer/categories`)
       .then((response) => {
         setCategories(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);

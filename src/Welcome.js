@@ -8,7 +8,6 @@ const Welcome = ({ navigation }) => {
 
   useEffect(() => {
     if (!authLoading) {
-      console.log(userDetails);
       if (isLogged == "true") {
         if (userDetails?.role == 2) {
           const { is_verified, is_active } = userDetails;
